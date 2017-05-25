@@ -1645,6 +1645,19 @@ public class CommonG {
         this.cookies = cookies;
     }
 
+    public void addCookieToCookies(Cookie cookie) {
+        this.cookies.add(cookie);
+    }
+
+    public void removeCookieFromCookies(Cookie cookie) {
+        Iterator<Cookie> it = this.cookies.iterator();
+        while (it.hasNext()) {
+            Cookie nextCookie = it.next();
+            if (nextCookie.getName().equals(cookie.getName())) {
+                this.cookies.remove(nextCookie);
+            }
+        }
+    }
 
     /**
      * Parse jsonpath expression from a given string.

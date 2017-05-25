@@ -572,6 +572,99 @@ public class GivenGSpec extends BaseGSpec {
         commonspec.setCookies(cookieList);
     }
 
+    @Given("^I create a cookie ( based on '(.+?)')? ( and set name'(.+?)')? ( and set value '(.+?)')? ( and set wrap '(.+?)')? ( and set domain '(.+?))?( and set path '(.+?)')?( and set maxAge '(.+?)')?( and set secure '(.+?)')? ( and set httpOnly '(.+?)')?$")
+    public void addCookie(String basedCookie, String name, String value, boolean wrap, String domain, String path, long maxAge, boolean secure, boolean httpOnly) throws Exception {
+
+        List<Cookie> arrayListCookies = commonspec.getCookies();
+        Iterator<Cookie> it = arrayListCookies.iterator();
+
+        if (basedCookie == null) {
+            boolean foundCookie = false;
+            while (it.hasNext() && !foundCookie) {
+                Cookie cookie = it.next();
+                if (cookie.getName().equals(name)) {
+                    foundCookie = true;
+                }
+            }
+            if (foundCookie) {
+                throw new Exception("Cookie with name" + name + "already exist");
+            } else {
+                Cookie newCookie = new Cookie(name, value, wrap, domain, path, maxAge, secure, httpOnly);
+                commonspec.addCookieToCookies(newCookie);
+            }
+        } else {
+
+//            Cookie findCookie = null;
+//            while (it.hasNext() && findCookie == null){
+//                Cookie cookie = it.next();
+//                if (cookie.getName().equals(basedCookie)){
+//                    findCookie = cookie;
+//                }
+//            }
+//            // generar finalCookie con los campos nuevos y los de findCookie
+//            // boorra con commonspec.remove(findcookie)
+//            // anadir a commonspec.add(findcookie)
+
+
+            List<Cookie> finalListCookies = new ArrayList<Cookie>();
+            Cookie newCookie = null;
+            while (it.hasNext() && newCookie == null) {
+                Cookie cookie = it.next();
+                if (cookie.getName().equals(basedCookie)) {
+                    newCookie = cookie;
+                } else {
+                    finalListCookies.add(cookie);
+                }
+            }
+            if (newCookie != null) {
+                String newCookieName = newCookie.getName();
+                if (value == null) {
+                    value = newCookie.getValue();
+                }
+                if (!wrap) {
+                    wrap = newCookie.isWrap();
+                }
+                Cookie finalCookie = new Cookie(name, value, wrap, domain, path, maxAge, secure, httpOnly);
+                finalListCookies.add(finalCookie);
+                commonspec.setCookies(finalListCookies);
+            } else {
+                throw new Exception("Cookie with name" + basedCookie + "does not exist");
+            }
+        }
+    }
+
+    @Given("^I delete cookie '(.+?)'$")
+    public void deleteCookie(String name) throws Exception {
+
+        Cookie cookie = new Cookie(name, "value", false, "", "", 99999, false, false);
+        commonspec.removeCookieFromCookies(cookie);
+
+//        List<Cookie> arrayListCookies = commonspec.getCookies();
+//        Iterator<Cookie> it = arrayListCookies.iterator();
+//        Cookie cookie = null;
+//        if (name != null){
+//            boolean foundCookie = false;
+//            while (it.hasNext() && !foundCookie) {
+//                cookie = it.next();
+//                if (cookie.getName().equals(name)) {
+//                    foundCookie = true;
+//                }
+//            }
+//            if (foundCookie) {
+//                commonspec.removeCookieFromCookies(cookie);
+//            } else {
+//                throw new Exception("Cookie with name" + name + "does not exist");
+//            }
+//        } else {
+//            throw new Exception("Provide a correct cookie name");
+//        }
+    }
+
+
+
+
+
+
     /*
      * Copies file/s from remote system into local system
      *
