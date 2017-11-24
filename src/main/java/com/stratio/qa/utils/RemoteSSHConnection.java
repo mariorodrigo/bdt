@@ -115,10 +115,6 @@ public class RemoteSSHConnection {
         }
 
         File myFile = new File(localfile);
-        if (myFile.exists()) {
-
-        }
-
         List<String> files = new ArrayList<String>();
 
         if (myFile.isDirectory()) {
