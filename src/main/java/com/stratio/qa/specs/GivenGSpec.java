@@ -29,6 +29,7 @@ import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
 import java.util.*;
@@ -615,6 +616,10 @@ public class GivenGSpec extends BaseGSpec {
      */
     @Given("^I inbound copy '(.+?)' through a ssh connection to '(.+?)'$")
     public void copyFromRemoteFile(String remotePath, String localPath) throws Exception {
+        File myFile = new File(remotePath);
+        if (!myFile.exists()) {
+            throw new FileNotFoundException();
+        }
         commonspec.getRemoteSSHConnection().copyFrom(remotePath, localPath);
     }
 
@@ -628,6 +633,10 @@ public class GivenGSpec extends BaseGSpec {
      */
     @Given("^I outbound copy '(.+?)' through a ssh connection to '(.+?)'$")
     public void copyToRemoteFile(String localPath, String remotePath) throws Exception {
+        File myFile = new File(localPath);
+        if (!myFile.exists()) {
+            throw new FileNotFoundException();
+        }
         commonspec.getRemoteSSHConnection().copyTo(localPath, remotePath);
     }
 

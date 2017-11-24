@@ -102,6 +102,7 @@ public class RemoteSSHConnection {
         // exec 'scp -t rfile' remotely
         String command = "scp " + (ptimestamp ? "-p" : "") + " -d -t " + rfile;
         Channel channel = session.openChannel("exec");
+
         ((ChannelExec) channel).setCommand(command);
 
         // get I/O streams for remote scp
@@ -115,6 +116,10 @@ public class RemoteSSHConnection {
         }
 
         File myFile = new File(localfile);
+        if (myFile.exists()) {
+
+        }
+
         List<String> files = new ArrayList<String>();
 
         if (myFile.isDirectory()) {
