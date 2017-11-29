@@ -65,7 +65,7 @@ public class GosecSSOUtils {
      * @return cookieToken list of token generated
      * @throws Exception exception
      */
-    public HashMap<String, String> ssoTokenGenerator() throws Exception {
+    public HashMap<String, String> ssoTokenGenerator(Boolean withoutGosec) throws Exception {
         String protocol = "https://";
         HashMap<String, String> cookieToken = new HashMap<>();
 
@@ -108,8 +108,10 @@ public class GosecSSOUtils {
                 logger.debug(oneHeader.getName() + ":" + oneHeader.getValue());
             }
 
-            HttpGet managementGet = new HttpGet(protocol + ssoHost + managementHost);
-            client.execute(managementGet, context);
+            if (!withoutGosec) {
+                HttpGet managementGet = new HttpGet(protocol + ssoHost + managementHost);
+                client.execute(managementGet, context);
+            }
 
             for (Cookie oneCookie : context.getCookieStore().getCookies()) {
                 logger.debug(oneCookie.getName() + ":" + oneCookie.getValue());

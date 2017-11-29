@@ -25,8 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GosecSSOUtilsIT {
     private final Logger logger = LoggerFactory.getLogger(GosecSSOUtilsIT.class);
-    private static GosecSSOUtils gosecSsoUtils = new GosecSSOUtils("www.google.com",
-            "anyUser", "anyPassWord");
+    private static GosecSSOUtils gosecSsoUtils = new GosecSSOUtils("paasfabric-int.labs.stratio.com",
+            "admin", "1234");
 
     @Test
     public void gosecUtilsConstructorTest() throws Exception {
@@ -37,7 +37,7 @@ public class GosecSSOUtilsIT {
 
     @Test
     public void gosecUtilsFakeTokenGeneratorTest() throws Exception {
-        assertThat(gosecSsoUtils.ssoTokenGenerator().size()).isEqualTo(0);
+        assertThat(gosecSsoUtils.ssoTokenGenerator(true).size()).isEqualTo(6);
     }
 
 }
