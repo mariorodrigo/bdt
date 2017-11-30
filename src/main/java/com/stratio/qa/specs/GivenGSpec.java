@@ -586,15 +586,13 @@ public class GivenGSpec extends BaseGSpec {
      */
     @Given("^I set sso token( without gosec-management)? using host '(.+?)' with user '(.+?)' and password '(.+?)'$")
     public void setGoSecSSOCookie(String foo, String ssoHost, String userName, String passWord) throws Exception {
-        Boolean withoutGosec = false;
-        String[] tokenList = new String[0];
-        if (foo != null) {
-            withoutGosec = false;
+        String[] tokenList;
+        if (foo.contains("without")) {
             tokenList = new String[]{"dcos-acs-auth-cookie"};
         } else {
             tokenList = new String[]{"user", "dcos-acs-auth-cookie"};
         }
-        HashMap<String, String> ssoCookies = new GosecSSOUtils(ssoHost, userName, passWord).ssoTokenGenerator(withoutGosec);
+        HashMap<String, String> ssoCookies = new GosecSSOUtils(ssoHost, userName, passWord).ssoTokenGenerator(foo);
         List<Cookie> cookiesAtributes = addSsoToken(ssoCookies, tokenList);
 
         commonspec.setCookies(cookiesAtributes);
