@@ -28,7 +28,6 @@ import cucumber.api.java.Before;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CommandInfo;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -37,7 +36,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.http.HttpClient;
 import org.openqa.selenium.remote.internal.ApacheHttpClient;
 import org.openqa.selenium.remote.internal.HttpClientFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -214,16 +212,14 @@ public class HookGSpec extends BaseGSpec {
                 scenario.write("Current Page URL is: " + commonspec.getDriver().getCurrentUrl());
                 byte[] screenshot = (commonspec.getDriver().getScreenshotAs(OutputType.BYTES));
                 scenario.embed(screenshot, "image/png");
-            } catch (WebDriverException somePlatformsDontSupportScreenshots) {
+            } catch (Exception somePlatformsDontSupportScreenshots) {
                 fail("Screenshot failed " + somePlatformsDontSupportScreenshots);
             }
             try {
                 String htmlCode = commonspec.getHtmlCode(commonspec.getDriver());
                 FileUtils.write(new File("htmlSource"), htmlCode);
-            } catch (WebDriverException somePlatformsDontSupportScreenshots) {
+            } catch (Exception somePlatformsDontSupportScreenshots) {
                 fail("Screenshot failed " + somePlatformsDontSupportScreenshots);
-            } catch (IOException e) {
-                fail("failed to save html source to file");
             }
         }
     }
