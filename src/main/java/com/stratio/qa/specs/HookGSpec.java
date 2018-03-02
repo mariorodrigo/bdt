@@ -19,7 +19,6 @@ package com.stratio.qa.specs;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClientConfig;
 import com.stratio.qa.exceptions.SuppressableException;
-import com.stratio.qa.utils.CukesGHooks;
 import com.stratio.qa.utils.ThreadProperty;
 import com.thoughtworks.selenium.SeleniumException;
 import cucumber.api.Scenario;
@@ -28,14 +27,14 @@ import cucumber.api.java.Before;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.CommandInfo;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.HttpCommandExecutor;
-import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.*;
 import org.openqa.selenium.remote.http.HttpClient;
 import org.openqa.selenium.remote.internal.ApacheHttpClient;
 import org.openqa.selenium.remote.internal.HttpClientFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -210,9 +209,16 @@ public class HookGSpec extends BaseGSpec {
         if (scenario.isFailed()) {
             try {
                 scenario.write("Current Page URL is: " + commonspec.getDriver().getCurrentUrl());
-                byte[] screenshot = (commonspec.getDriver().getScreenshotAs(OutputType.BYTES));
+                commonspec.getDriver().manage().window().maximize();
+                long id = Thread.currentThread().getId();
+                byte[] screenshot;
+                Augmenter augmenter = new Augmenter();
+
+                TakesScreenshot ts = (TakesScreenshot) augmenter.augment(commonspec.getDriver());
+                screenshot = ts.getScreenshotAs(OutputType.BYTES);
+
                 scenario.embed(screenshot, "image/png");
-            } catch (Exception somePlatformsDontSupportScreenshots) {
+            } catch (WebDriverException somePlatformsDontSupportScreenshots) {
                 fail("Screenshot failed " + somePlatformsDontSupportScreenshots);
             }
             try {
