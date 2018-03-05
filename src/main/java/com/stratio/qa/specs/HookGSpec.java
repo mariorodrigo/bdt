@@ -208,13 +208,14 @@ public class HookGSpec extends BaseGSpec {
     public void teardown(Scenario scenario) {
         if (scenario.isFailed()) {
             try {
-                scenario.write("Current Page URL is: " + commonspec.getDriver().getCurrentUrl());
-                commonspec.getDriver().manage().window().maximize();
+                scenario.write("Current Page URL is: " + this.commonspec.getDriver().getCurrentUrl());
+                this.commonspec.getDriver().manage().window().maximize();
+                this.commonspec.captureEvidence(this.commonspec.getDriver(), "screenCapture");
                 long id = Thread.currentThread().getId();
                 byte[] screenshot;
                 Augmenter augmenter = new Augmenter();
 
-                TakesScreenshot ts = (TakesScreenshot) augmenter.augment(commonspec.getDriver());
+                TakesScreenshot ts = (TakesScreenshot) augmenter.augment(this.commonspec.getDriver());
                 screenshot = ts.getScreenshotAs(OutputType.BYTES);
 
                 scenario.embed(screenshot, "image/png");
@@ -222,7 +223,7 @@ public class HookGSpec extends BaseGSpec {
                 fail("Screenshot failed " + somePlatformsDontSupportScreenshots);
             }
             try {
-                String htmlCode = commonspec.getHtmlCode(commonspec.getDriver());
+                String htmlCode = this.commonspec.getHtmlCode(this.commonspec.getDriver());
                 FileUtils.write(new File("htmlSource"), htmlCode);
             } catch (Exception somePlatformsDontSupportScreenshots) {
                 fail("Screenshot failed " + somePlatformsDontSupportScreenshots);
