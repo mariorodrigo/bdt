@@ -184,7 +184,7 @@ public class HookGSpec extends BaseGSpec {
         if (capabilities.getCapability("deviceName") == null) {
             commonspec.getDriver().manage().window().setSize(new Dimension(1440, 900));
         }
-        if (commonspec.getDriver().manage().window().getSize().height < 1020) {
+        if (commonspec.getDriver().manage().window().getSize().height < 900) {
             commonspec.getDriver().manage().window().maximize();
         }
 
